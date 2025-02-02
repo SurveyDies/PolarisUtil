@@ -30,11 +30,11 @@ class ThreadTasks(commands.Cog):
     def cog_unload(self):
         self.check_held_threads.cancel()
 
-    @tasks.loop(seconds=4)
+    @tasks.loop(hours=3)
     async def check_held_threads(self):
         """Check threads in held guilds and send messages to keep them active."""
         now = datetime.now(timezone.utc)
-        threshold = now - timedelta(seconds=3)
+        threshold = now - timedelta(days=5)
 
         for guild_id in list(self.dm.get_held_threads().keys()):
             guild = await self.bot.fetch_guild(int(guild_id))
