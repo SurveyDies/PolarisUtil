@@ -2,27 +2,41 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+
 class AddRole(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.dm = self.bot.data_manager
 
-    @app_commands.command(name="add_role", description="Add a role to a reaction role message.")
-    async def add_role(self, interaction: discord.Interaction, message_id: str, role: discord.Role, emoji: str):
+    @app_commands.command(
+        name="add_role", description="Add a role to a reaction role message."
+    )
+    async def add_role(
+        self,
+        interaction: discord.Interaction,
+        message_id: str,
+        role: discord.Role,
+        emoji: str,
+    ):
         if not interaction.user.guild_permissions.manage_roles:
             await interaction.response.send_message(
-                "You don't have the necessary permissions to use this command.", ephemeral=True
+                "You don't have the necessary permissions to use this command.",
+                ephemeral=True,
             )
             return
 
         try:
             msg = await interaction.channel.fetch_message(message_id)
         except discord.NotFound:
-            await interaction.response.send_message("Message not found!", ephemeral=True)
+            await interaction.response.send_message(
+                "Message not found!", ephemeral=True
+            )
             return
 
         if not interaction.guild.me.guild_permissions.manage_roles:
             await interaction.response.send_message(
-                "I don't have permission to manage roles. Please grant me the necessary permissions.", ephemeral=True
+                "I don't have permission to manage roles. Please grant me the necessary permissions.",
+                ephemeral=True,
             )
             return
 
@@ -32,7 +46,7 @@ class AddRole(commands.Cog):
                 ephemeral=True,
             )
             return
-        
+
         if role.managed:
             await interaction.response.send_message(
                 f"I cannot assign the role `{role.name}` because it is externally managed.",
@@ -43,10 +57,7 @@ class AddRole(commands.Cog):
         guild_id = str(interaction.guild.id)
         channel_id = str(interaction.channel.id)
 
-        self.bot.reaction_role_map.setdefault(guild_id, {}).setdefault(channel_id, {}).setdefault(message_id, {})
-
-        self.bot.reaction_role_map[guild_id][channel_id][message_id][emoji] = role.id
-        self.bot.save_data()
+        self.dm.add_reaction_role(guild_id, channel_id, message_id, emoji, role.id)
 
         if not interaction.guild.me.guild_permissions.add_reactions:
             await interaction.response.send_message(
@@ -69,8 +80,10 @@ class AddRole(commands.Cog):
             )
         except discord.HTTPException as e:
             await interaction.response.send_message(
-                f"An error occurred while trying to add the reaction: {str(e)}", ephemeral=True
+                f"An error occurred while trying to add the reaction: {str(e)}",
+                ephemeral=True,
             )
+
 
 async def setup(bot):
     await bot.add_cog(AddRole(bot))

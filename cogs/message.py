@@ -1,6 +1,7 @@
 from discord import app_commands
 from discord.ext import commands
 
+
 class Message(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -11,13 +12,15 @@ class Message(commands.Cog):
 
         if not ctx.author.guild_permissions.manage_messages:
             await ctx.send(
-                "You don't have the necessary permissions to use this command.", ephemeral=True
+                "You don't have the necessary permissions to use this command.",
+                ephemeral=True,
             )
             return
 
         msg = await ctx.send(message)
 
         await ctx.send(f"Message ID: `{msg.id}`", ephemeral=True)
+
 
 async def setup(bot):
     await bot.add_cog(Message(bot))

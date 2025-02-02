@@ -1,3 +1,6 @@
 /.venv
-/bot_data.json
 /__pycache__
+/cogs/__pycache__
+/cogs/tasks/__pycache__
+config.ini
+bot_data.json
