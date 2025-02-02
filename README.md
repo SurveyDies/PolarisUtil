@@ -21,7 +21,7 @@ Got a feature request? Let me know!
 
 ### **Invite the Bot**  
 You can add the hosted version to your server here:  
-🔗 [Invite Link](https://discord.com/oauth2/authorize?client_id=1332006901000441926&permissions=0&integration_type=292343000144&scope=bot)  
+🔗 [Invite Link](https://discord.com/oauth2/authorize?client_id=1332006901000441926&permissions=292343000144&integration_type=0&scope=bot)  
 
 ### **Self-Hosting**  
 Prefer to run the bot yourself? Follow these steps:  
